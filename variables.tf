@@ -20,7 +20,3 @@ variable "path_to_public_key" {
 variable "path_to_private_key" {
   default = "mykey.pem"
 }
-
-variable "cluster_name" {
-  default = "${var.client_name}-${var.project_name}-${var_environment}"
-}
