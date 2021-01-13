@@ -1,8 +1,8 @@
-environment=
+environment=""
 
-region=
+region=""
 
-instance_type=
+instance_type=""
 
-client_name=
-project_name=
+client_name=""
+project_name=""
