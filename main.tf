@@ -16,7 +16,7 @@ locals {
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
 
-  name                 = "k8s-${local.cluster_name}-vpc"
+  name                 = "${local.cluster_name}-vpc"
   cidr                 = "10.0.0.0/16"
   azs                  = data.aws_availability_zones.available.names
   private_subnets      = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
@@ -39,15 +39,15 @@ module "vpc" {
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
 
-  cluster_name    = "eks-${local.cluster_name}"
-  cluster_version = "1.17"
+  cluster_name    = local.cluster_name
+  cluster_version = "1.18"
   subnets         = module.vpc.private_subnets
 
   vpc_id = module.vpc.vpc_id
 
   node_groups = {
     first = {
-      desired_capacity = 1
+      desired_capacity = 2
       max_capacity     = 10
       min_capacity     = 1
 
@@ -71,7 +71,7 @@ resource "aws_iam_policy" "worker_policy" {
 resource "helm_release" "ingress" {
   name       = "ingress"
   chart      = "aws-alb-ingress-controller"
-  repository = "	https://charts.helm.sh/incubator"
+  repository = "https://charts.helm.sh/incubator/"
 
   set {
     name  = "autoDiscoverAwsRegion"
@@ -85,4 +85,5 @@ resource "helm_release" "ingress" {
     name  = "clusterName"
     value = local.cluster_name
   }
+  depends_on = [ module.eks ]
 }

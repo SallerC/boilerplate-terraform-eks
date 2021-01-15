@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: teste-eks-terraform
+spec:
+  selector:
+    matchLabels:
+      name: teste-eks-terraform
+  template:
+    metadata:
+      labels:
+        name: teste-eks-terraform
+    spec:
+      containers:
+        - name: app
+          image: paulbouwer/hello-kubernetes:1.8
+          ports:
+            - containerPort: 8080
